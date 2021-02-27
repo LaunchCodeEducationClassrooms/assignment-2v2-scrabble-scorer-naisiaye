@@ -1,5 +1,5 @@
 // inspired by https://exercism.io/tracks/javascript/exercises/etl/solutions/91f99a3cca9548cebe5975d7ebca6a85
-
+let word = '';
 const input = require("readline-sync");
 
 const oldPointStructure = {
@@ -33,27 +33,101 @@ function oldScrabbleScorer(word) {
 // don't change the names or your program won't work as expected. //
 
 function initialPrompt() {
-   console.log("Let's play some scrabble! Enter a word:");
+  word = input.question("Let's play some scrabble! \nEnter a word to score: ");
+  /*while(word!==/^[A-Za-z ]+$/){
+    word = input.question('Error! Please enter a character in the alphabet');
+  }
+  console.log(oldScrabbleScorer(word))*/
 };
 
-let simpleScore;
+let simpleScore = function(word){
+  score = word.length;
+  return score;
+};
 
-let vowelBonusScore;
+let vowelBonusScore = function(word){
+  word = word.toUpperCase()
+  let score = 0;
+  for (let i=0; i < word.length; i++) {
+    if (word[i] === "A" || word[i] === "E" || word[i] === "I" || word[i] === "O" || word[i] === "U") {
+      score += 3
+    }
+    else {
+      score++
+    }
+  }
+  return score
+};
 
-let scrabbleScore;
+let scrabbleScore = function(word){
+  word = word.toLowerCase();
+	let score = 0;
+  for (let i = 0; i < word.length; i++) {
+    score += newPointStructure[word[i]]
+  }
+  return score;
+};
 
-const scoringAlgorithms = [];
 
-function scorerPrompt() {}
+let simpleScoreObj = {
+  name: 'Simple Score',
+  description: "Each letter is worth 1 point.",
+  scoreFunction: simpleScore
+};
 
-function transform() {};
+let vowelBonusScoreObj = {
+  name: 'Bonus Vowel',
+  description: "Vowels are 3 pts, consonants are 1 pt.",
+  scoreFunction: vowelBonusScore
+};
 
-let newPointStructure;
+let scrabbleObj = {
+  name: 'Scrabble',
+  description: "The traditional scoring algorithm.",
+  scoreFunction: scrabbleScore
+};
+const scoringAlgorithms = [simpleScoreObj,vowelBonusScoreObj,scrabbleObj];
+
+function scorerPrompt(){
+  let algorithmChoice = input.question(`Which scoring algorithm would you like to use?
+  0 - Simple: One point per character
+  1 - Vowel Bonus: Vowels are worth 3 points
+  2 - Scrabble: Uses scrabble point system
+  Enter 0, 1, or 2: `)
+   if (algorithmChoice == 0) {
+    console.log(`Score for '${word}': ${scoringAlgorithms[0].scoreFunction(word)}`);
+  }
+  if (algorithmChoice == 1) {
+    console.log(`Score for '${word}': ${scoringAlgorithms[1].scoreFunction(word)}`);
+  }
+  if (algorithmChoice == 2) {
+    console.log(`Score for '${word}': ${scoringAlgorithms[2].scoreFunction(word)}`);
+  }
+}
+
+
+function transform(obj) {
+  let newObj = {}
+  for (key in obj) {
+    for (let i = 0; i < obj[key].length; i++) {
+          let lowerCase = (obj[key][i]).toLowerCase()
+          newObj[lowerCase] = Number(key)
+          //if ((obj[key][i]).length == 0){
+            //
+          //}
+    }
+  }
+  return newObj
+};
+
+let newPointStructure = transform(oldPointStructure);
 
 function runProgram() {
    initialPrompt();
+   scorerPrompt();
    
 }
+
 
 // Don't write any code below this line //
 // And don't change these or your program will not run as expected //
