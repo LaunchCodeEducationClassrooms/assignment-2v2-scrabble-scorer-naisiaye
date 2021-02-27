@@ -34,10 +34,6 @@ function oldScrabbleScorer(word) {
 
 function initialPrompt() {
   word = input.question("Let's play some scrabble! \nEnter a word to score: ");
-  /*while(word!==/^[A-Za-z ]+$/){
-    word = input.question('Error! Please enter a character in the alphabet');
-  }
-  console.log(oldScrabbleScorer(word))*/
 };
 
 let simpleScore = function(word){
@@ -69,25 +65,22 @@ let scrabbleScore = function(word){
 };
 
 
-let simpleScoreObj = {
+ const scoringAlgorithms = [{
   name: 'Simple Score',
   description: "Each letter is worth 1 point.",
   scoreFunction: simpleScore
-};
-
-let vowelBonusScoreObj = {
+},
+{
   name: 'Bonus Vowel',
   description: "Vowels are 3 pts, consonants are 1 pt.",
   scoreFunction: vowelBonusScore
-};
-
-let scrabbleObj = {
+},
+{
   name: 'Scrabble',
   description: "The traditional scoring algorithm.",
   scoreFunction: scrabbleScore
-};
-const scoringAlgorithms = [simpleScoreObj,vowelBonusScoreObj,scrabbleObj];
-
+}
+];
 function scorerPrompt(){
   let algorithmChoice = input.question(`Which scoring algorithm would you like to use?
   0 - Simple: One point per character
@@ -112,9 +105,6 @@ function transform(obj) {
     for (let i = 0; i < obj[key].length; i++) {
           let lowerCase = (obj[key][i]).toLowerCase()
           newObj[lowerCase] = Number(key)
-          //if ((obj[key][i]).length == 0){
-            //
-          //}
     }
   }
   return newObj
